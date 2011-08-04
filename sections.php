@@ -24,6 +24,7 @@ $sectionMain = new Section(
 $sectionCalc = new Section(
 	"Калькулятор", "calc.html", true
 );
+$sectionCalc->extraArgs['scripts'] = array('js/calc.js');
 
 $_sections = array(
 	NULL => $sectionMain,

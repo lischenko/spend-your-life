@@ -37,7 +37,7 @@
 	    <?	}
 	  }?>
 </head>
-<body onload="initialize(); alert(initialLocation);">
+<body onload="applyToAllSections(initTable)">
 <!--    <div id="titleBlock"><a href="index.php"><img src="img/th.png" alt="md"></a></div> -->
 
 	<div id="sectionsList">
