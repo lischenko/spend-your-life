@@ -1,5 +1,4 @@
 <?
-	require_once("auth.php");
 	require_once("sections.php");
 	$secs = getSections();
 	
