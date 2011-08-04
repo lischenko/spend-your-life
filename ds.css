@@ -1,0 +1,100 @@
+body, p, tr, td, ol, ul, li {font: 12px Verdana, Arial, Helvetica, Tahoma, sans-serif; text-align:left;}
+
+ul li, ol li { padding-bottom: 7px; }
+img { border-width: 0;}
+h1 { font-size: 48px; font-weight: bold; padding:10px 0px 5px 5px;}
+h2 { font-size: 12px; font-weight: bold; padding:7px 0px 4px 5px;}
+h3 { font-size: 11px; font-weight: bold; padding:7px 0px 4px 0px;}
+
+a, a:active {color:#6060e0; text-decoration:underline;}
+a:hover {color:black;}
+a:visited {}
+
+body {padding: 0px; margin: 0px;}
+
+div.honor { border: 1px solid #808080; padding: 8px; margin: 10px; text-align: center; }
+
+div.story { border: 1px solid black; background-color: #fafafa; padding: 8px; margin: 10px; }
+div.story div.time {font-size: 8px; padding-bottom: 3px;}
+div.story div.user {font-size: 8px; padding-top: 3px;}
+
+label { width: 8em; float: left; text-align: right; margin-right: 0.5em; display: block; }
+.submit input, .submit textarea { margin-left: 4.5em; }
+input#user { width: 70%; }
+textarea {width: 70%; height: 200px;}
+fieldset { }
+legend { border: 1px solid #808080; padding: 2px 6px; }
+div.vote { text-align: center; }
+span.voteCountPro { color: #005000; }
+span.voteCountCons { color: #600000; }
+
+div#stubBody {padding: 10px;}
+div.inset { float: right; width: 50%; font-size: 90%; background-color: #f0f0f0; padding: 20px; }
+img.articlePic { float: right; margin: 10px; }
+
+div#titleBlock { width: 100%; text-align: center; }
+div#sectionsList { width: 100%; background-color: #f0f0f0; padding: 10px 0; margin-bottom: 20px; text-align: center; }
+div#body, div#body p {line-height: 17px;}
+div#authorBlock { padding: 0px; }
+div#interlinks { padding: 15px 0 0 0; }
+div#ads { padding: 25px 0; }
+div#footer { text-align: right; padding: 100px 15px 15px 0; }
+
+	#leftcontent {
+		position: absolute;
+		left:0px;
+		top:130px;
+		width:200px;
+	}
+ 
+	#centercontent {
+   		margin-left: 250px;
+   		margin-right:250px;
+		/*
+		IE5x PC mis-implements the box model. Because of that we sometimes have
+		to perform a little CSS trickery to get pixel-perfect display across browsers.
+		The following bit of code was proposed by Tantek Celik, and it preys upon a CSS
+		parsing bug in IE5x PC that will prematurly close a style rule when it runs
+		into the string "\"}\"". After that string appears in a rule, then, we can override
+		previously set attribute values and only browsers without the parse bug will
+		recognize the new values. So any of the name-value pairs above this comment
+		that we need to override for browsers with correct box-model implementations
+		will be listed below.
+		
+		We use the voice-family property because it is likely to be used very infrequently,
+		and where it is used it will be set on the body tag. So the second voice-family value 
+		of "inherit" will override our bogus "\"}\"" value and allow the proper value to
+		cascade down from the body tag.
+ 
+		The style rule immediately following this rule offers another chance for CSS2
+		aware browsers to pick up the values meant for correct box-model implementations.
+		It uses a CSS2 selector that will be ignored by IE5x PC.
+		
+		Read more at http://www.glish.com/css/hacks.asp
+		*/
+		
+		voice-family: "\"}\"";
+		voice-family: inherit;
+   		margin-left: 251px;
+   		margin-right:251px;
+		}
+	html>body #centercontent {
+   		margin-left: 251px;
+   		margin-right:251px;
+	}
+ 
+	#rightcontent {
+		position: absolute;
+		right:0px;
+		top:130px;
+		width:200px;
+	}
+	
+	#banner {
+		height:120px;
+	}
+	html>body #banner {
+		height:120px;
+	}
+		
+#map_canvas { height: 100%; width: 500; }
