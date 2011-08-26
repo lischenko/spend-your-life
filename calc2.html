@@ -12,6 +12,17 @@ function applyToAllFields(array, postfix, f) {
 	applyToAllExpenditures(array, f2);
 }
 
+/* For each of the available expenditures, f will be called with exp name parameter 
+and two element paramaters: wd and ss */
+function applyToAllFieldPairs(array, f) {
+	f2 = function(e) {
+		var elemWd = document.getElementById(e + '_wd');
+		var elemSs = document.getElementById(e + '_ss');	
+		f(e, elemWd, elemSs);
+	};
+	applyToAllExpenditures(array, f2);
+}
+
 function applyToAllExpenditures(array, f) {
 	for (e in array) {
 		f(e);
@@ -62,7 +73,6 @@ function applyToAllExpenditures(array, f) {
 		total = addCell(newRow, divCreator);
 		total.id = e + '_totalPerExp';
 
-
 /*		
 		if ( exp.hasOwnProperty('comment') ) {
 			var newComment = document.createElement("span");
@@ -89,52 +99,32 @@ function calculate() {
 
 	function getFloat(elem) {
 		v = elem.value;
-		if (v=="") { v = 0; }
+		if (v == "") { v = 0; }
 		return parseFloat(v);		
 	}
 
-/*	applyToAllFields(expenditures, '_totalPerExp', function(elem) {
-		elem.value = 0;		
-		elem.hidden = 'hidden';
-	});*/
-
-	applyToAllExpenditures(expenditures, function(e) {
-		var wdElem = document.getElementById(e + "_wd");
-		var ssElem = document.getElementById(e + "_ss");
-
+	applyToAllFieldPairs(expenditures, function(e, wdElem, ssElem) {
 		var totalElem = document.getElementById(e + "_totalPerExp");
 
 		hoursAYear = toHoursAYear( getFloat(wdElem), getFloat(ssElem) );
-		totalElem.innerText = hoursToHumanReadable( hoursAYear );
-	});
+		totalElem.innerText = hoursToHumanReadable( hoursAYear );		
+	})
 
-	function hoursToHumanReadable(h) {
-		d = new Date();
-		d.setTime(h*60*60*1000);
+	groupHours = new Array();
 
-		years = d.getYear() - 1970;
-		months = d.getMonth();
-		days = d.getDate() - 1;
+	applyToAllFieldPairs(expenditures, function(e, wdElem, ssElem) {
+		exp = expenditures[e];
 
-		var result = '';
-		
-		if (days > 0) {
+		current = groupHours[exp.group]
+		//alert()
+		if (isNaN(current)) { current = 0 }
+		groupHours[exp.group] = current + toHoursAYear( getFloat(wdElem), getFloat(ssElem) )
+	})
 
-			if (months > 0) {
-
-				if (years > 0) {
-					result += years + ' лет ';
-				}
-
-				result += months + ' месяцев ';
-			}
-
-			result += days + ' дней';
-		}
-
-		return result;
-
+	for(var i in groupHours) {
+		appendToResults( i + ": " + hoursToHumanReadable(groupHours[i]) )
 	}
+
 /*
 	applyToAllFields(expenditures, '_wd', function(elem) {
 		v = elem.value;
@@ -142,21 +132,61 @@ function calculate() {
 		sumWd += parseFloat(v);
 	});
 */
-	function toHoursAYear(wdHoursADay, wsHoursADay) {
-		return 365*(5/7*parseFloat(wdHoursADay) + 2/7*parseFloat(wsHoursADay));
-	}
 
 	total = toHoursAYear(sumWd, sumSs);
 	busy = (5/7*sumWd + 2/7*sumSs)/24;
-	alert(parseInt(100*(1-busy))+"% времени вы свободны");
 
+	appendToResults(hoursToHumanReadable((1-busy)*365*24) + " ("+ parseInt(100*(1-busy))+"%) времени на остальное");
+
+}
+
+function hoursToHumanReadable(h) {
+	d = new Date();
+	d.setTime(h*60*60*1000);
+
+	years = d.getYear() - 1970;
+	months = d.getMonth();
+	days = d.getDate() - 1;
+
+	var result = '';
+	
+	if (days > 0) {
+
+		if (months > 0) {
+
+			if (years > 0) {
+				result += years + ' лет ';
+			}
+
+			result += months + ' месяцев ';
+		}
+
+		result += days + ' дней';
+	}
+
+	return result;
+}
+
+function toHoursAYear(wdHoursADay, wsHoursADay) {
+	return 365*(5/7*parseFloat(wdHoursADay) + 2/7*parseFloat(wsHoursADay));
+}
+
+function appendToResults(data) {
+	r = document.getElementById('results');
+
+	newRow = document.createElement("tr");
+	r.appendChild(newRow);
+
+	newDescCell = document.createElement("td");
+	newRow.appendChild(newDescCell);
+	newDescCell.innerText = data;
 }
 
 function start() {
 	expenditures = {
-		sleep: { name: "Сон", defWd: 8, defSs: 8, normWd: 8, normSs: 8, group: "Л" },
-		commute: { name: "Транспорт (на работу и обратно)", defWd: 1, group: "Р" },
-		job: { name: "Работа", defWd: 8, group: "Р" }	
+		sleep: { name: "Сон", defWd: 8, defSs: 8, normWd: 8, normSs: 8, group: "Сон" },
+		commute: { name: "Транспорт (на работу и обратно)", defWd: 1, group: "Работа" },
+		job: { name: "Работа", defWd: 8, group: "Работа" }	
 	}
 
 	createTable(expenditures, document.getElementById("input"));
