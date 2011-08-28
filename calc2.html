@@ -1,19 +1,22 @@
 <html>
 <head>
-<script language="javascript" src="js/calc2.js"></script>
+<script type="text/javascript" src="js/calc2.js"></script>
+<style media="screen" type="text/css">
+#err { color: red; }
+</style>
 </head>
-<body onload="start()">
-	<table id="input">
+<body onload="initCalc()">
+	<table id="calcInput">
 		<tr>
-			<th></th><th colspan="2">Затраты времени, ч</th>
+			<th></th><th colspan="2">Затраты времени (часов)</th>
 		</tr>
 		<tr>
 			<th>Занятие</th><th>В рабочие дни</th><th>На выходных</th>
 		</tr>
 	</table>
 
-	<button onClick="calculate()">Посчитать</button>
-
-	<table id="results"></table>
+	<button id="calcButton" onClick="calculate()">Посчитать</button>
+	<p/>
+	<span id="calcResults"></span>
 </body>
 </html>

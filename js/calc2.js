@@ -1,3 +1,7 @@
+/** Expects DOM to contain a placeholder table (id=calcInput) for input fields, 
+ * button (id=calcButton) that calls calculate() function and 
+ * span (id="results") placeholder for results. */
+
 var expenditures;
 
 function applyToAllFields(array, postfix, f) {
@@ -23,6 +27,25 @@ function applyToAllExpenditures(array, f) {
 	for (e in array) {
 		f(e);
 	}	
+}
+
+function validateNumber(elem, event) {
+	var isNumber = /^\d*\.{0,1}\d+$/.test(elem.value);
+	elem.className = isNumber || elem.value=="" ? null : "err";
+	revalidate();
+}
+
+function revalidate() {	
+	totalErrors = 0;
+	validateField = function(elem) { 
+		if (elem.className == 'err') {++totalErrors;}
+	}
+	applyToAllFields( expenditures, '_wd', validateField );
+	applyToAllFields( expenditures, '_ss', validateField );
+	
+	b = document.getElementById("calcButton");
+	b.disabled = totalErrors>0;
+	b.className = totalErrors > 0 ? "err" : null;
 }
 
  function createTable(expenditures, newTable) {
@@ -83,6 +106,8 @@ function applyToAllExpenditures(array, f) {
  }
 
 function calculate() {
+	setResults("<h3>Итого, в год вы тратите время на:</h3>");
+
 	sumWd = 0;
 	applyToAllFields(expenditures, '_wd', function(elem) {
 		sumWd += getFloat(elem);
@@ -132,7 +157,7 @@ function calculate() {
 	total = toHoursAYear(sumWd, sumSs);
 	busy = (5/7*sumWd + 2/7*sumSs)/24;
 
-	appendToResults(hoursToHumanReadable((1-busy)*365*24) + " ("+ parseInt(100*(1-busy))+"%) времени на остальное");
+	appendToResults(hoursToHumanReadable((1-busy)*365*24) + " ("+ parseInt(100*(1-busy))+"% времени) на остальное");
 
 }
 
@@ -151,13 +176,13 @@ function hoursToHumanReadable(h) {
 		if (months > 0) {
 
 			if (years > 0) {
-				result += years + ' лет ';
+				result += years + ' л ';
 			}
 
-			result += months + ' месяцев ';
+			result += months + ' м ';
 		}
 
-		result += days + ' дней';
+		result += days + ' д';
 	}
 
 	return result;
@@ -167,23 +192,22 @@ function toHoursAYear(wdHoursADay, wsHoursADay) {
 	return 365*(5/7*parseFloat(wdHoursADay) + 2/7*parseFloat(wsHoursADay));
 }
 
-function appendToResults(data) {
-	r = document.getElementById('results');
-
-	newRow = document.createElement("tr");
-	r.appendChild(newRow);
-
-	newDescCell = document.createElement("td");
-	newRow.appendChild(newDescCell);
-	newDescCell.innerText = data;
+function setResults(data) {
+	r = document.getElementById('calcResults');
+	r.innerHTML = data;
 }
 
-function start() {
+function appendToResults(data) {
+	r = document.getElementById('calcResults');
+	r.innerHTML += data+"<br/>";
+}
+
+function initCalc() {
 	expenditures = {
 		sleep: { name: "Сон", defWd: 8, defSs: 8, normWd: 8, normSs: 8, group: "Сон" },
 		commute: { name: "Транспорт (на работу и обратно)", defWd: 1, group: "Работа" },
 		job: { name: "Работа", defWd: 8, group: "Работа" }	
 	}
 
-	createTable(expenditures, document.getElementById("input"));
+	createTable(expenditures, document.getElementById("calcInput"));
 }
