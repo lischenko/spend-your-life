@@ -106,7 +106,7 @@ function revalidate() {
  }
 
 function calculate() {
-	setResults("<h3>Итого, в год вы тратите время на:</h3>");
+	setResults("Итого, в год вы тратите время на:\n\n");
 
 	sumWd = 0;
 	applyToAllFields(expenditures, '_wd', function(elem) {
@@ -137,7 +137,6 @@ function calculate() {
 		exp = expenditures[e];
 
 		current = groupHours[exp.group]
-		//alert()
 		if (isNaN(current)) { current = 0 }
 		groupHours[exp.group] = current + toHoursAYear( getFloat(wdElem), getFloat(ssElem) )
 	})
@@ -176,13 +175,13 @@ function hoursToHumanReadable(h) {
 		if (months > 0) {
 
 			if (years > 0) {
-				result += years + ' л ';
+				result += years + 'л ';
 			}
 
-			result += months + ' м ';
+			result += months + 'м ';
 		}
 
-		result += days + ' д';
+		result += days + 'д';
 	}
 
 	return result;
@@ -194,19 +193,32 @@ function toHoursAYear(wdHoursADay, wsHoursADay) {
 
 function setResults(data) {
 	r = document.getElementById('calcResults');
-	r.innerHTML = data;
+	r.innerText = data;
 }
 
 function appendToResults(data) {
 	r = document.getElementById('calcResults');
-	r.innerHTML += data+"<br/>";
+	r.innerText += data+"\n";
 }
 
 function initCalc() {
 	expenditures = {
-		sleep: { name: "Сон", defWd: 8, defSs: 8, normWd: 8, normSs: 8, group: "Сон" },
-		commute: { name: "Транспорт (на работу и обратно)", defWd: 1, group: "Работа" },
-		job: { name: "Работа", defWd: 8, group: "Работа" }	
+		sleep: { name: "Сон", defWd: 8, defSs: 8, normWd: 8, normSs: 8, group: "Физиологические потребности" },
+		commute: { name: "Транспорт\n(на работу и обратно)", defWd: 1, group: "Работа" },
+		job: { name: "Работа", defWd: 8, group: "Работа" },
+		eat: { name: "Еда", defWd: 2.5, defSs: 2.5, group: "Физиологические потребности", comment: "Рекомендуемый минимум - 2,5 часа в день" },
+		dress: { name: "Уход за собой", defWd: 1, defSs: 1, comment: "Рекомендуемый минимум для женщин - 1,5 час в день, для мужчин - 0,5 часа в день", group: "Физиологические потребности" },
+		workComm: { name: "Общение, устное и письменное, по рабочим и околорабочим вопросам в нерабочее время, в том числе поддержание социальных связей (корпоративные праздники, полезные встречи)", group: "Работа" },
+		workRead: { name: "Чтение профессиональной литературы (журналы, газеты, книги, учебная литература)", group: "Работа" },
+		sport: { name: "Спорт", group: "Личное" },
+		sex: { name: "Секс", group: "Личное" },
+		tv: { name: "Просмотр телевизора, серфинг по интернету", group: "Личное" },
+		friendsComm: { name: "Общение с близкими, друзьями", group: "Личное" },
+		hobby: { name: "Хобби", group: "Личное" },
+		entertainment: { name: "Прочие развлечения (без учета просмотра телевизора, бессмысленного серфинга по интернету, полезных встреч и необходимых пьянок)", group: "Личное" },
+		shopping: { name: "Покупки", group: "Личное" },
+		trainingWork: { name: "Образование, связанное с наиболее оптимальным выполнением рабочих функций (курсы иностранных языков, курсы повышения квалификации)", group: "Работа" },
+		trainingOther: { name: "Образование, не связанное с выполнением рабочих функций", group: "Личное" }
 	}
 
 	createTable(expenditures, document.getElementById("calcInput"));
