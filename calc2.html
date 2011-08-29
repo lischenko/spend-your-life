@@ -1,21 +1,25 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-<title>Calc</title>
+<title>Калькулятор времени</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
 <script type="text/javascript" src="js/calc2.js"></script>
 <style media="screen" type="text/css">
-#err { color: red; }
+.err { color: red; }
 </style>
 </head>
 <body onload="initCalc()">
-	<table id="calcInput">
-		<tr>
-			<th></th><th colspan="2">Затраты времени (часов)</th>
-		</tr>
-		<tr>
-			<th>Занятие</th><th>В рабочие дни</th><th>На выходных</th>
-		</tr>
+	<table>
+		<thead>
+			<tr>
+				<th></th><th colspan="2">Затраты времени (часов)</th>
+			</tr>
+			<tr>
+				<th>Занятие</th><th>В рабочие дни</th><th>На выходных</th>
+			</tr>
+		</thead>
+		<tbody id="calcInput">
+		</tbody>
 	</table>
 
 	<button id="calcButton" onClick="calculate()">Посчитать</button>
