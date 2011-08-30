@@ -106,7 +106,7 @@ function revalidate() {
  }
 
 function calculate() {
-	setResults("Итого, в год вы тратите время на:\n\n");
+	setResults("Итак, в год вы тратите время на:\n\n");
 
 	sumWd = 0;
 	applyToAllFields(expenditures, '_wd', function(elem) {
@@ -156,11 +156,19 @@ function calculate() {
 	total = toHoursAYear(sumWd, sumSs);
 	busy = (5/7*sumWd + 2/7*sumSs)/24;
 
-	appendToResults(hoursToHumanReadable((1-busy)*365*24) + " ("+ parseInt(100*(1-busy))+"% времени) на остальное");
+	if (busy <= 1) {
+		appendToResults("У вас остаётся " + hoursToHumanReadable((1-busy)*365*24) + " ("+ parseInt(100*(1-busy))+"%) на остальное.");		
+	} else {
+		appendToResults("Вам не хватает " + parseInt((busy-1)*365) + " дней в году.");				
+	}
 
 }
 
 function hoursToHumanReadable(h) {
+	if (0 == h) {
+		return "-";
+	}
+
 	d = new Date();
 	d.setTime(h*60*60*1000);
 
@@ -204,21 +212,21 @@ function appendToResults(data) {
 function initCalc() {
 	expenditures = {
 		sleep: { name: "Сон", defWd: 8, defSs: 8, normWd: 8, normSs: 8, group: "Физиологические потребности" },
-		commute: { name: "Транспорт\n(на работу и обратно)", defWd: 1, group: "Работа" },
-		job: { name: "Работа", defWd: 8, group: "Работа" },
+		commute: { name: "Транспорт\n(на работу и обратно)", defWd: 1, group: "Работу" },
+		job: { name: "Работу", defWd: 8, group: "Работу" },
 		eat: { name: "Еда", defWd: 2.5, defSs: 2.5, group: "Физиологические потребности", comment: "Рекомендуемый минимум - 2,5 часа в день" },
 		dress: { name: "Уход за собой", defWd: 1, defSs: 1, comment: "Рекомендуемый минимум для женщин - 1,5 час в день, для мужчин - 0,5 часа в день", group: "Физиологические потребности" },
-		workComm: { name: "Общение, устное и письменное, по рабочим и околорабочим вопросам в нерабочее время, в том числе поддержание социальных связей (корпоративные праздники, полезные встречи)", group: "Работа" },
-		workRead: { name: "Чтение профессиональной литературы (журналы, газеты, книги, учебная литература)", group: "Работа" },
-		sport: { name: "Спорт", group: "Личное" },
-		sex: { name: "Секс", group: "Личное" },
-		tv: { name: "Просмотр телевизора, серфинг по интернету", group: "Личное" },
-		friendsComm: { name: "Общение с близкими, друзьями", group: "Личное" },
-		hobby: { name: "Хобби", group: "Личное" },
-		entertainment: { name: "Прочие развлечения (без учета просмотра телевизора, бессмысленного серфинга по интернету, полезных встреч и необходимых пьянок)", group: "Личное" },
-		shopping: { name: "Покупки", group: "Личное" },
-		trainingWork: { name: "Образование, связанное с наиболее оптимальным выполнением рабочих функций (курсы иностранных языков, курсы повышения квалификации)", group: "Работа" },
-		trainingOther: { name: "Образование, не связанное с выполнением рабочих функций", group: "Личное" }
+		workComm: { name: "Общение по рабочим вопросам в нерабочее время, в том числе корпоративные праздники, полезные встречи", group: "Работу" },
+		workRead: { name: "Чтение профессиональной литературы (журналы, газеты, книги, учебная литература)", group: "Работу" },
+		sport: { name: "Спорт", group: "Личные дела" },
+		sex: { name: '"Отдых" от работы - алкоголь', group: "Убийство времени с отягощающими обстоятельствами"},
+		tv: { name: "Просмотр телевизора, серфинг по интернету", group: "Убийство времени с отягощающими обстоятельствами"},
+		friendsComm: { name: "Общение с близкими, друзьями", group: "Личные дела" },
+		hobby: { name: "Хобби", group: "Личные дела" },
+		entertainment: { name: "Прочие развлечения (без учета просмотра телевизора, серфинга по интернету, полезных встреч и пьянок)", group: "Личные дела" },
+		shopping: { name: "Шоппинг", group: "Личные дела" },
+		trainingWork: { name: "Образование, связанное с работой (курсы иностранных языков, курсы повышения квалификации)", group: "Работу" },
+		trainingOther: { name: "Образование, не связанное с работой", group: "Личные дела" }
 	}
 
 	createTable(expenditures, document.getElementById("calcInput"));
