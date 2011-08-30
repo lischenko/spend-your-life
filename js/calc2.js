@@ -30,7 +30,7 @@ function applyToAllExpenditures(array, f) {
 }
 
 function validateNumber(elem, event) {
-	var isNumber = /^\d*\.{0,1}\d+$/.test(elem.value);
+	var isNumber = /^\d*\.{0,1}\d+$/.test(elem.value.replace(/,/g, '.'));
 	elem.className = isNumber || elem.value=="" ? null : "err";
 	revalidate();
 }
@@ -119,9 +119,9 @@ function calculate() {
 	});
 
 	function getFloat(elem) {
-		v = elem.value;
+		v = elem.value.replace(/,/g, '.');
 		if (v == "") { v = 0; }
-		return parseFloat(v);		
+		return parseFloat(v);
 	}
 
 	applyToAllFieldPairs(expenditures, function(e, wdElem, ssElem) {
