@@ -58,7 +58,7 @@ function revalidate() {
 		
 		newDescCell = document.createElement("td");
 		newRow.appendChild(newDescCell);
-		newDescCell.innerText = exp.name;
+		newDescCell.innerHTML = exp.name;
 		
 		addCell = function(parentNode, createContent) {
 			var newCell = document.createElement("td");
@@ -96,7 +96,7 @@ function revalidate() {
 		if ( exp.hasOwnProperty('comment') ) {
 			var newComment = document.createElement("span");
 			newComment.className = 'comment';
-			newComment.innerText = array[exp].comment;
+			newComment.innerHTML = array[exp].comment;
 			newFieldCell.appendChild(newComment);
 		}
 */
@@ -128,7 +128,7 @@ function calculate() {
 		var totalElem = document.getElementById(e + "_totalPerExp");
 
 		hoursAYear = toHoursAYear( getFloat(wdElem), getFloat(ssElem) );
-		totalElem.innerText = hoursToHumanReadable( hoursAYear );		
+		totalElem.innerHTML = hoursToHumanReadable( hoursAYear );		
 	})
 
 	groupHours = new Array();
@@ -201,12 +201,12 @@ function toHoursAYear(wdHoursADay, wsHoursADay) {
 
 function setResults(data) {
 	r = document.getElementById('calcResults');
-	r.innerText = data;
+	r.innerHTML = data;
 }
 
 function appendToResults(data) {
 	r = document.getElementById('calcResults');
-	r.innerText += data+"\n";
+	r.innerHTML += data+"\n";
 }
 
 function initCalc() {
