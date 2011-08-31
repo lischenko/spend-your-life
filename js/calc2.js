@@ -206,7 +206,7 @@ function setResults(data) {
 
 function appendToResults(data) {
 	r = document.getElementById('calcResults');
-	r.innerHTML += data+"\n";
+	r.innerHTML += data+"<br>";
 }
 
 function initCalc() {
