@@ -132,7 +132,7 @@ function calculate() {
 		var totalElem = document.getElementById(e + "_totalPerExp");
 
 		hoursAYear = toHoursAYear( getFloat(wdElem), getFloat(ssElem) );
-		totalElem.innerHTML = hoursToHumanReadable( hoursAYear );		
+		totalElem.innerHTML = hoursToHumanReadable( hoursAYear ).split(' ').join('&nbsp;');	
 	})
 
 	groupHours = new Array();
