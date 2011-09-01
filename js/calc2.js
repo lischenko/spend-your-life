@@ -201,20 +201,20 @@ function toHoursAYear(wdHoursADay, wsHoursADay) {
 }
 
 function appendToResults(data) {
-	item = document.createElement('li');
+	listItem = document.createElement('li');
 
-	setItemText(item, data);
+	setItemText(listItem, data);
 	
 	list = document.getElementById('calcResults');
-	list.appendChild(item);
+	list.appendChild(listItem);
 }
 
-function setItemText(item, data) {
+function setItemText(listItem, data) {
         ie = getInternetExplorerVersion();
         if (ie > -1) {
-                item.innerText = data; //not supported by FF
+                listItem.innerText = data; //not supported by FF
         } else {
-                item.textContent = data; // not supported by IE
+                listItem.textContent = data; // not supported by IE
         }
 }
 
