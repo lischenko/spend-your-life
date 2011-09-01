@@ -258,21 +258,24 @@ function initCalc() {
 	gPers = "личные дела";
 	gWaste = "убийство времени с отягощающими обстоятельствами"
 	expenditures = {
-		sleep: { name: "Сон", defWd: 8, defSs: 8, normWd: 8, normSs: 8, group: gPhys },
-		commute: { name: "Транспорт\n(на работу и обратно)", defWd: 1, group: gWork },
 		job: { name: "Работа", defWd: 8, group: gWork },
+		commute: { name: "Транспорт\n(на работу и обратно)", defWd: 1, group: gWork },
+		workRead: { name: "Чтение профессиональной литературы", group: gWork },
+		trainingWork: { name: "Образование, связанное с работой", group: gWork },
+		workComm: { name: "Общение по рабочим вопросам в нерабочее время, в том числе корпоративы, встречи", group: gWork },
+				
+		sleep: { name: "Сон", defWd: 8, defSs: 8, normWd: 8, normSs: 8, group: gPhys },
 		eat: { name: "Еда", defWd: 2.5, defSs: 2.5, group: gPhys, comment: "Рекомендуемый минимум - 2,5 часа в день" },
 		dress: { name: "Уход за собой", defWd: 1, defSs: 1, comment: "Рекомендуемый минимум для женщин - 1,5 час в день, для мужчин - 0,5 часа в день", group: gPhys },
-		workComm: { name: "Общение по рабочим вопросам в нерабочее время, в том числе корпоративные праздники, полезные встречи", group: gWork },
-		workRead: { name: "Чтение профессиональной литературы (журналы, газеты, книги, учебная литература)", group: gWork },
-		sport: { name: "Спорт", group: gPers },
-		sex: { name: '"Отдых" от работы - алкоголь', group: gWaste},
+	
 		tv: { name: "Просмотр телевизора, серфинг по интернету", group: gWaste},
+		alcohol: { name: "Посиделки с алкоголем", group: gWaste},
+
+		sport: { name: "Спорт", group: gPers },
 		friendsComm: { name: "Общение с близкими, друзьями", group: gPers },
 		hobby: { name: "Хобби", group: gPers },
-		entertainment: { name: "Прочие развлечения (без учета просмотра телевизора, серфинга по интернету, полезных встреч и пьянок)", group: gPers },
 		shopping: { name: "Шоппинг", group: gPers },
-		trainingWork: { name: "Образование, связанное с работой (курсы иностранных языков, курсы повышения квалификации)", group: gWork },
+		entertainment: { name: "Прочие развлечения", group: gPers },
 		trainingOther: { name: "Образование, не связанное с работой", group: gPers }
 	}
 
