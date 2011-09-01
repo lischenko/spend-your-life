@@ -106,7 +106,8 @@ function revalidate() {
  }
 
 function calculate() {
-	setResults("Итак, в год вы тратите время на:\n\n");
+	caption = document.getElementById('calcResultsCaption');
+	caption.style.display = 'inline';
 
 	sumWd = 0;
 	applyToAllFields(expenditures, '_wd', function(elem) {
@@ -199,21 +200,19 @@ function toHoursAYear(wdHoursADay, wsHoursADay) {
 	return 365*(5/7*parseFloat(wdHoursADay) + 2/7*parseFloat(wsHoursADay));
 }
 
-function setResults(data) {
-	r = document.getElementById('calcResults');
-	r.innerHTML = data;
-}
-
 function appendToResults(data) {
-	r = document.getElementById('calcResults');
-	r.innerHTML += data+"<br>";
+	item = document.createElement('li');
+	item.value = data;
+
+	list = document.getElementById('calcResults');
+	list.appendChild(item);
 }
 
 function initCalc() {
 	expenditures = {
 		sleep: { name: "Сон", defWd: 8, defSs: 8, normWd: 8, normSs: 8, group: "Физиологические потребности" },
 		commute: { name: "Транспорт\n(на работу и обратно)", defWd: 1, group: "Работу" },
-		job: { name: "Работу", defWd: 8, group: "Работу" },
+		job: { name: "Работа", defWd: 8, group: "Работу" },
 		eat: { name: "Еда", defWd: 2.5, defSs: 2.5, group: "Физиологические потребности", comment: "Рекомендуемый минимум - 2,5 часа в день" },
 		dress: { name: "Уход за собой", defWd: 1, defSs: 1, comment: "Рекомендуемый минимум для женщин - 1,5 час в день, для мужчин - 0,5 часа в день", group: "Физиологические потребности" },
 		workComm: { name: "Общение по рабочим вопросам в нерабочее время, в том числе корпоративные праздники, полезные встречи", group: "Работу" },
