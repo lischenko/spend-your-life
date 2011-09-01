@@ -202,10 +202,35 @@ function toHoursAYear(wdHoursADay, wsHoursADay) {
 
 function appendToResults(data) {
 	item = document.createElement('li');
-	item.value = data;
 
+	setItemText(item, data);
+	
 	list = document.getElementById('calcResults');
 	list.appendChild(item);
+}
+
+function setItemText(item, data) {
+        ie = getInternetExplorerVersion();
+        if (ie > -1) {
+                item.innerText = data; //not supported by FF
+        } else {
+                item.textContent = data; // not supported by IE
+        }
+}
+
+function getInternetExplorerVersion()
+// Returns the version of Internet Explorer or a -1
+// (indicating the use of another browser).
+{
+  var rv = -1; // Return value assumes failure.
+  if (navigator.appName == 'Microsoft Internet Explorer')
+  {
+    var ua = navigator.userAgent;
+    var re  = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})");
+    if (re.exec(ua) != null)
+      rv = parseFloat( RegExp.$1 );
+  }
+  return rv;
 }
 
 function initCalc() {
