@@ -1,6 +1,7 @@
 /** Expects DOM to contain a placeholder table (id=calcInput) for input fields, 
- * button (id=calcButton) that calls calculate() function and 
- * span (id="results") placeholder for results. */
+ * button (id=calcButton) that calls calculate() function, 
+ * div (id=calcResultsDiv) that contains ul (id=calcResults) placeholder for results by group
+ * and span (id=calcRemaining) placeholder for remaining time result. */
 
 var expenditures;
 
