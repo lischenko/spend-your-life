@@ -106,8 +106,10 @@ function revalidate() {
  }
 
 function calculate() {
-	caption = document.getElementById('calcResultsCaption');
-	caption.style.display = 'inline';
+	resDiv = document.getElementById('calcResultsDiv');
+	resDiv.style.display = 'inline';
+
+	clearResults();
 
 	sumWd = 0;
 	applyToAllFields(expenditures, '_wd', function(elem) {
@@ -157,11 +159,13 @@ function calculate() {
 	total = toHoursAYear(sumWd, sumSs);
 	busy = (5/7*sumWd + 2/7*sumSs)/24;
 
+
 	if (busy <= 1) {
-		appendToResults("У вас остаётся " + hoursToHumanReadable((1-busy)*365*24) + " ("+ parseInt(100*(1-busy))+"%) на остальное.");		
+		remaining = "У вас остаётся " + hoursToHumanReadable((1-busy)*365*24) + " ("+ parseInt(100*(1-busy))+"%) на остальное.";		
 	} else {
-		appendToResults("Вам не хватает " + parseInt((busy-1)*365) + " дней в году.");				
+		remaining = "Вам не хватает " + parseInt((busy-1)*365) + " дней в году.";				
 	}
+	document.getElementById('calcRemaining').innerHTML = remaining;
 
 }
 
@@ -209,6 +213,11 @@ function appendToResults(data) {
 	list.appendChild(listItem);
 }
 
+function clearResults() {
+	list = document.getElementById('calcResults');
+	removeAllChildren(list);
+}
+
 function setItemText(listItem, data) {
         ie = getInternetExplorerVersion();
         if (ie > -1) {
@@ -218,6 +227,7 @@ function setItemText(listItem, data) {
         }
 }
 
+// http://msdn.microsoft.com/en-us/library/ms537509(v=vs.85).aspx
 function getInternetExplorerVersion()
 // Returns the version of Internet Explorer or a -1
 // (indicating the use of another browser).
@@ -231,6 +241,15 @@ function getInternetExplorerVersion()
       rv = parseFloat( RegExp.$1 );
   }
   return rv;
+}
+
+//http://matthom.com/archive/2007/05/03/removing-all-child-nodes-from-an-element
+function removeAllChildren(cell) {
+	if ( cell.hasChildNodes() ) {
+	    while ( cell.childNodes.length >= 1 ) {
+	        cell.removeChild( cell.firstChild );       
+	    } 
+	}
 }
 
 function initCalc() {
