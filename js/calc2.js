@@ -108,7 +108,7 @@ function revalidate() {
 
 function calculate() {
 	resDiv = document.getElementById('calcResultsDiv');
-	resDiv.style.display = 'inline';
+	resDiv.style.visibility = 'visible';
 
 	clearResults();
 
