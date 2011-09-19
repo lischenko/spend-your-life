@@ -174,11 +174,11 @@ function calculate() {
 	busy = (5/7*sumWd + 2/7*sumSs)/24;
 
 	freeHours = (1-busy)*365*24;
-	lackHours = (busy-1)*365;
+	lackHours = (busy-1)*365*24;
 	if (busy <= 1) {
 		remaining = "У вас остаётся " + hoursToHumanReadable(freeHours) + " ("+ parseInt(100*(1-busy))+"%) на остальное.";		
 	} else {
-		remaining = "Вам не хватает " + parseInt(lackHours) + " дней в году.";				
+		remaining = "Вам не хватает " + parseInt(lackHours/24) + " дней в году.";				
 	}
 	document.getElementById('calcRemaining').innerHTML = remaining;
 
