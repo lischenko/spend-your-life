@@ -51,18 +51,14 @@ function revalidate() {
 
  function createTable(expenditures, newTable) {
 
+ 	var prevGroup;
+
  	for(e in expenditures) {
  		exp = expenditures[e];
 
-		newRow = document.createElement("tr");
-		newTable.appendChild(newRow);
-		
-		newDescCell = document.createElement("td");
-		newRow.appendChild(newDescCell);
-		newDescCell.innerHTML = exp.name;
-		
 		addCell = function(parentNode, createContent) {
 			var newCell = document.createElement("td");
+
 			parentNode.appendChild(newCell);
 			
 			newContent = createContent();
@@ -77,6 +73,15 @@ function revalidate() {
 			newContent.setAttribute("onBlur", "return validateNumber(this, event)");
 			return newContent;
 		}
+
+		newRow = document.createElement("tr");
+		newTable.appendChild(newRow);
+
+		addCell(newRow, function() {
+			var newContent = document.createElement("span");
+			newContent.innerHTML = exp.name;
+			return newContent;			
+		})		
 
 		i1 = addCell(newRow, inputCreator);
 		i1.value = exp.hasOwnProperty('defWd') ? exp.defWd : "";
@@ -146,28 +151,69 @@ function calculate() {
 	})
 
 	for(var i in groupHours) {
-		appendToResults( i + ": " + hoursToHumanReadable(groupHours[i]) )
-	}
+		//print out members of the group
+		members = document.createElement("ul");
+		applyToAllExpenditures( expenditures, function(elemName) {
+			elem = expenditures[elemName];
+			if (elem.group == i) {
+				lItem = document.createElement("li");
+				lItem.setAttribute('style', "font-size: 75%")
 
-/*
-	applyToAllFields(expenditures, '_wd', function(elem) {
-		v = elem.value;
-		if (v=="") { v = 0; }
-		sumWd += parseFloat(v);
-	});
-*/
+				setItemText(lItem, elem.name)
+
+				members.appendChild(lItem); 
+			}
+		})
+
+		groupItem = appendToResults( i + ": " + hoursToHumanReadable(groupHours[i]) )
+		groupItem.appendChild(members)
+
+	}
 
 	total = toHoursAYear(sumWd, sumSs);
 	busy = (5/7*sumWd + 2/7*sumSs)/24;
 
-
+	freeHours = (1-busy)*365*24;
+	lackHours = (busy-1)*365;
 	if (busy <= 1) {
-		remaining = "У вас остаётся " + hoursToHumanReadable((1-busy)*365*24) + " ("+ parseInt(100*(1-busy))+"%) на остальное.";		
+		remaining = "У вас остаётся " + hoursToHumanReadable(freeHours) + " ("+ parseInt(100*(1-busy))+"%) на остальное.";		
 	} else {
-		remaining = "Вам не хватает " + parseInt((busy-1)*365) + " дней в году.";				
+		remaining = "Вам не хватает " + parseInt(lackHours) + " дней в году.";				
 	}
 	document.getElementById('calcRemaining').innerHTML = remaining;
 
+	// ----------------------------------
+	//
+	// Сollect data for charts - XXX: duplicates some of the above code
+	//
+	// Time consumed by each of the expenditures
+	var toRetHoursAYearPerExp = [];
+	count = 0;
+	applyToAllFieldPairs(expenditures, function(e, wdElem, ssElem) {
+		toRetHoursAYearPerExp[count++] = { 
+			label: expenditures[e].name, data: toHoursAYear( getFloat(wdElem), getFloat(ssElem) ) };
+	})
+	if (busy <= 1) {
+		toRetHoursAYearPerExp[count++] = { label: "Свободное время", data: freeHours }
+	} else {
+		toRetHoursAYearPerExp[count++] = { label: "Не хватает", data: lackHours }
+	}
+
+	// Time consumed my each of the groups
+	//
+	var toRetHoursAYearPerGroup = [];
+	count = 0;
+	for(var i in groupHours) {
+		toRetHoursAYearPerGroup[count++] = { label: i, data: groupHours[i] }
+	}
+	if (busy <= 1) {
+		toRetHoursAYearPerGroup[count++] = { label: "Свободное время", data: freeHours }
+	} else {
+		toRetHoursAYearPerGroup[count++] = { label: "Не хватает", data: lackHours }
+	}
+
+//	return toRetHoursAYearPerExp;
+	return toRetHoursAYearPerGroup;
 }
 
 function hoursToHumanReadable(h) {
@@ -212,6 +258,8 @@ function appendToResults(data) {
 	
 	list = document.getElementById('calcResults');
 	list.appendChild(listItem);
+
+	return listItem;
 }
 
 function clearResults() {
@@ -254,17 +302,17 @@ function removeAllChildren(cell) {
 }
 
 function initCalc() {
-	gWork = "работу";
-	gPhys = "физиологические потребности";
-	gPers = "личные дела";
-	gWaste = "убийство времени с отягощающими обстоятельствами"
+	gWork = "Работа";
+	gPhys = "Физиологические потребности";
+	gPers = "Личные дела";
+	gWaste = "Убийство времени с отягощающими обстоятельствами"
 	expenditures = {
 		job: { name: "Работа", defWd: 8, group: gWork },
 		commute: { name: "Транспорт\n(на работу и обратно)", defWd: 1, group: gWork },
 		workRead: { name: "Чтение профессиональной литературы", group: gWork },
 		trainingWork: { name: "Образование, связанное с работой", group: gWork },
 		workComm: { name: "Общение по рабочим вопросам в нерабочее время, в том числе корпоративы, встречи", group: gWork },
-				
+
 		sleep: { name: "Сон", defWd: 8, defSs: 8, normWd: 8, normSs: 8, group: gPhys },
 		eat: { name: "Еда", defWd: 2.5, defSs: 2.5, group: gPhys, comment: "Рекомендуемый минимум - 2,5 часа в день" },
 		dress: { name: "Уход за собой", defWd: 1, defSs: 1, comment: "Рекомендуемый минимум для женщин - 1,5 час в день, для мужчин - 0,5 часа в день", group: gPhys },
@@ -274,7 +322,8 @@ function initCalc() {
 
 		sport: { name: "Спорт", group: gPers },
 		friendsComm: { name: "Общение с близкими, друзьями", group: gPers },
-		hobby: { name: "Хобби", group: gPers },
+		reading: { name: "Чтение", group: gPers },
+		hobby: { name: "Хобби", group: gPers },		
 		shopping: { name: "Шоппинг", group: gPers },
 		entertainment: { name: "Прочие развлечения", group: gPers },
 		trainingOther: { name: "Образование, не связанное с работой", group: gPers }

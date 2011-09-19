@@ -1,0 +1,31 @@
+<script type="text/javascript" src="/calc/calc2.js"></script>
+<i>В разработке</i>
+<div style="display:none">
+Дорогие читатели!
+В одной из глав книги я рассчитывала, на что тратит свое время среднестатистический работающий человек, житель крупного города, а также сколько свободных минут/часов/дней и месяцев у него остается. Но Вы-то не среднестатистический, а совершенно уникальный человек! С помощью этой программы вы можете калькулировать свои расходы времени. Зачем? Например, для того, чтобы увидеть картину в целом или обнаружить, куда утекает ваше время. Или просто ради забавы.
+	<table>
+		<thead>
+			<tr>
+				<th></th><th colspan="2">Затраты времени (часов)</th>
+			</tr>
+			<tr>
+				<th>Занятие</th><th>В рабочие дни</th><th>На выходных</th>
+			</tr>
+		</thead>
+		<tbody id="calcInput">
+		</tbody>
+	</table>
+
+	<button id="calcButton" onClick="calculate();">Посчитать</button>
+	<p>
+	<a name='calcResultsAnchor'></a>
+	<div id='calcResultsDiv' style='display:none'>
+		<h3>Итак, в год вы тратите время на:</h3>
+		<ul id="calcResults"></ul>
+		<span id='calcRemaining'></span>
+	</div>
+</div>
+
+<script type="text/javascript">// <![CDATA[
+  initCalc();
+// ]]></script>
