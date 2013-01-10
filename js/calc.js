@@ -5,6 +5,16 @@
 
 var expenditures;
 
+String.prototype.format = function() {
+  var args = arguments;
+  return this.replace(/{(\d+)}/g, function(match, number) { 
+    return typeof args[number] != 'undefined'
+      ? args[number]
+      : match
+    ;
+  });
+};
+
 function applyToAllFields(array, postfix, f) {
 	f2 = function(e) {
 		var elem = document.getElementById(e + postfix);
@@ -176,9 +186,9 @@ function calculate() {
 	freeHours = (1-busy)*365*24;
 	lackHours = (busy-1)*365*24;
 	if (busy <= 1) {
-		remaining = "У вас остаётся " + hoursToHumanReadable(freeHours) + " ("+ parseInt(100*(1-busy))+"%) на остальное.";		
+		remaining = i18n.remainingFree.format(hoursToHumanReadable(freeHours), parseInt(100*(1-busy)));		
 	} else {
-		remaining = "Вам не хватает " + parseInt(lackHours/24) + " дней в году.";				
+		remaining = i18n.remainingLack.format(parseInt(lackHours/24));				
 	}
 	document.getElementById('calcRemaining').innerHTML = remaining;
 
@@ -194,12 +204,12 @@ function calculate() {
 			label: expenditures[e].name, data: toHoursAYear( getFloat(wdElem), getFloat(ssElem) ) };
 	})
 	if (busy <= 1) {
-		toRetHoursAYearPerExp[count++] = { label: "Свободное время", data: freeHours }
+		toRetHoursAYearPerExp[count++] = { label: i18n.diagramFreeTime, data: freeHours }
 	} else {
-		toRetHoursAYearPerExp[count++] = { label: "Не хватает", data: lackHours }
+		toRetHoursAYearPerExp[count++] = { label: i18n.diagramLackTime, data: lackHours }
 	}
 
-	// Time consumed my each of the groups
+	// Time consumed by each of the groups
 	//
 	var toRetHoursAYearPerGroup = [];
 	count = 0;
@@ -207,9 +217,9 @@ function calculate() {
 		toRetHoursAYearPerGroup[count++] = { label: i, data: groupHours[i] }
 	}
 	if (busy <= 1) {
-		toRetHoursAYearPerGroup[count++] = { label: "Свободное время", data: freeHours }
+		toRetHoursAYearPerGroup[count++] = { label: i18n.diagramFreeTime, data: freeHours }
 	} else {
-		toRetHoursAYearPerGroup[count++] = { label: "Не хватает", data: lackHours }
+		toRetHoursAYearPerGroup[count++] = { label: i18n.diagramLackTime, data: lackHours }
 	}
 
 //	return toRetHoursAYearPerExp;
@@ -218,7 +228,7 @@ function calculate() {
 
 function hoursToHumanReadable(h) {
 	if (0 == h) {
-		return "-";
+		return i18n.none;
 	}
 
 	d = new Date();
@@ -235,13 +245,13 @@ function hoursToHumanReadable(h) {
 		if (months > 0) {
 
 			if (years > 0) {
-				result += years + 'л ';
+				result += years + i18n.years + ' ';
 			}
 
-			result += months + 'м ';
+			result += months + i18n.months + ' ';
 		}
 
-		result += days + 'д';
+		result += days + i18n.days;
 	}
 
 	return result;
@@ -302,11 +312,26 @@ function removeAllChildren(cell) {
 }
 
 function initCalc() {
-	gWork = "Работа";
-	gPhys = "Физиологические потребности";
-	gPers = "Личные дела";
-	gWaste = "Убийство времени с отягощающими обстоятельствами"
-	expenditures = {
+	expenditures = i18n.expenditures
+	createTable(expenditures, document.getElementById("calcInput"));
+}
+
+gWork = "Работа";
+gPhys = "Физиологические потребности";
+gPers = "Личные дела";
+gWaste = "Убийство времени с отягощающими обстоятельствами"
+
+i18n = {
+	diagramFreeTime: "Свободное время",
+	diagramLackTime: "Не хватает",
+	remainingFree: "У вас остаётся {0} ({1}%) на остальное.",
+	remainingLack: "Вам не хватает {0} дней в году.",
+	none: "-",
+	years: 'л',
+	months: 'м',
+	days: 'д',
+
+	expenditures: {
 		job: { name: "Работа", defWd: 8, group: gWork },
 		commute: { name: "Транспорт\n(на работу и обратно)", defWd: 1, group: gWork },
 		workRead: { name: "Чтение профессиональной литературы", group: gWork },
@@ -315,7 +340,7 @@ function initCalc() {
 
 		sleep: { name: "Сон", defWd: 8, defSs: 8, normWd: 8, normSs: 8, group: gPhys },
 		eat: { name: "Еда", defWd: 2.5, defSs: 2.5, group: gPhys, comment: "Рекомендуемый минимум - 2,5 часа в день" },
-		dress: { name: "Уход за собой", defWd: 1, defSs: 1, comment: "Рекомендуемый минимум для женщин - 1,5 час в день, для мужчин - 0,5 часа в день", group: gPhys },
+		dress: { name: "Уход за собой", defWd: 1, defSs: 1, group: gPhys, comment: "Рекомендуемый минимум для женщин - 1,5 час в день, для мужчин - 0,5 часа в день" },
 	
 		tv: { name: "Просмотр телевизора, серфинг по интернету", group: gWaste},
 		alcohol: { name: "Посиделки с алкоголем", group: gWaste},
@@ -328,6 +353,4 @@ function initCalc() {
 		entertainment: { name: "Прочие развлечения", group: gPers },
 		trainingOther: { name: "Образование, не связанное с работой", group: gPers }
 	}
-
-	createTable(expenditures, document.getElementById("calcInput"));
 }
