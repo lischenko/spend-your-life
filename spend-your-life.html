@@ -25,44 +25,61 @@ function chartExpenditures(data) {
 }
 </script>
 
+<script>
+	function initCalcGui(topLevelDiv) {
+		var table = $("<table>")
+		topLevelDiv.append(table)
+
+		var head = null
+		table.append( head = $("<thead>"))
+
+			head.append($("<tr>").
+			append($("<th>").attr("colspan", 2).text("Затраты времени (часов)")))
+
+			var h2 = $("<tr>")
+			head.append(h2)
+
+			h2.append($("<th>").text("Занятие"))
+			h2.append($("<th>").text("В рабочие дни"))
+			h2.append($("<th>").text("На выходных"))
+
+			table.append($("<tbody>").attr("id", "calcInput"))
+
+		topLevelDiv.append(
+			$("<button>").attr("id", "calcButton").click(function() {
+				results = calculate(); chartExpenditures(results);
+			}).text("Посчитать")
+		)
+
+		topLevelDiv.append($("<p>"))
+		topLevelDiv.append($("<a>").attr("name", "calcResultsAnchor"))
+
+		var results = $("<div>").attr("id", "calcResultsDiv").attr("style", 'visibility:hidden')
+		topLevelDiv.append(results)
+
+		results.append($("<h3>").text("На что вы тратите год своей жизни?"))
+
+		var list = $("<ul>").attr("id", "calcResults")
+		results.append(list)
+		list.append($("<li>"))
+
+		results.append($("<span>").attr("id", "calcRemaining"))
+
+		var graph = $("<div>").attr("id", "graphByExp").attr("style", "width:600px;height:300px")
+
+		results.append(graph)
+
+		initCalc()
+	}
+</script>
 
 <style media="screen" type="text/css">
 .err { color: red; }
 </style>
 </head>
-<body onload="initCalc()">
-	<table>
-		<thead>
-			<tr>
-				<th></th><th colspan="2">Затраты времени (часов)</th>
-			</tr>
-			<tr>
-				<th>Занятие</th><th>В рабочие дни</th><th>На выходных</th>
-			</tr>
-		</thead>
-		<tbody id="calcInput">
-		</tbody>
-	</table>
+<body onload="initCalcGui($('#calcGui'))">
+	<div id="calcGui">
 
-	<button id="calcButton" onClick="results = calculate(); chartExpenditures(results);">Посчитать</button>
-	<p>
-	<a name='calcResultsAnchor'></a>
-	<div id='calcResultsDiv' style='visibility:hidden'>
-		<h3>На что вы тратите год своей жизни?</h3>
-		<ul id="calcResults">
-			<li></li>
-			<li></li>
-			<li></li>
-			<li></li>
-			<li></li>
-			<li></li>
-			<li></li>
-		</ul>
-		<span id='calcRemaining'></span>
 	</div>
-
-   <div id="graphByExp" style="width:600px;height:300px"></div>
-
-
 </body>
 </html>
