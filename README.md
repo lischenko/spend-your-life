@@ -17,10 +17,7 @@ In fact, the calculator page has turned out to be the second most visited page o
 Demo
 ----
 
-You can try it by cloning the GitHub [repository] (https://github.com/lischenko/spend-your-life) and opening ````spend-your-life.html```` or by visiting [Daoshifting.ru] (http://daoshifting.ru/wp/?page_id=24) (note that the latter may not contain the most recent version).
+You can try it by cloning the GitHub [repository] (https://github.com/lischenko/spend-your-life) and opening ````demo.html````. Another example is ````demo-lang-autoselect.html```` but it requres to be deployed on the web server.
 
+You can also visit [Daoshifting.ru] (http://daoshifting.ru/wp/?page_id=24) but bear in mind that it may be not the most recent version.
 
-Limitations
------------
-
-The page is in Russian and has not been translated to any other languages yet.
