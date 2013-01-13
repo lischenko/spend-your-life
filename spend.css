@@ -1,0 +1,18 @@
+body, p, tr, td, ol, ul, li {font: 12px Verdana, Arial, Helvetica, Tahoma, sans-serif; text-align:left;}
+
+ul li, ol li { padding-bottom: 7px; }
+img { border-width: 0;}
+h1 { font-size: 48px; font-weight: bold; padding:10px 0px 5px 5px;}
+h2 { font-size: 12px; font-weight: bold; padding:7px 0px 4px 5px;}
+h3 { font-size: 11px; font-weight: bold; padding:7px 0px 4px 0px;}
+
+body { padding: 16px; }
+
+# calc styles
+ body {
+   color: #101010;
+   background-color: white }
+
+span.comment {font-size: 11px; padding-left: 10px;}
+input.err {color:red;}
+.err { color: red; }

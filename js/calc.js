@@ -334,6 +334,7 @@ function initCalcGui(topLevelDiv) {
 
 	var r1 = $("<tr>")
 	head.append(r1)
+	r1.append($("<th>"))
 	r1.append($("<th>").attr("colspan", 2).text(i18n.headingExpenditures))
 
 	var r2 = $("<tr>")
