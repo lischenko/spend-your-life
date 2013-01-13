@@ -311,46 +311,64 @@ function removeAllChildren(cell) {
 	}
 }
 
-function initCalc() {
-	expenditures = i18n.expenditures
-	createTable(expenditures, document.getElementById("calcInput"));
+function chartExpenditures(data) {
+	$.plot($("#graphByExp"), data, 
+	{
+		series: {
+			pie: { 
+				show: true
+			}
+		},
+		legend: {
+			show: false
+		}
+	});
 }
 
-gWork = "Работа";
-gPhys = "Физиологические потребности";
-gPers = "Личные дела";
-gWaste = "Убийство времени с отягощающими обстоятельствами"
+function initCalcGui(topLevelDiv) {
+	var table = $("<table>")
+	topLevelDiv.append(table)
 
-i18n = {
-	diagramFreeTime: "Свободное время",
-	diagramLackTime: "Не хватает",
-	remainingFree: "У вас остаётся {0} ({1}%) на остальное.",
-	remainingLack: "Вам не хватает {0} дней в году.",
-	none: "-",
-	years: 'л',
-	months: 'м',
-	days: 'д',
+	var head = $("<thead>")
+	table.append( head )
 
-	expenditures: {
-		job: { name: "Работа", defWd: 8, group: gWork },
-		commute: { name: "Транспорт\n(на работу и обратно)", defWd: 1, group: gWork },
-		workRead: { name: "Чтение профессиональной литературы", group: gWork },
-		trainingWork: { name: "Образование, связанное с работой", group: gWork },
-		workComm: { name: "Общение по рабочим вопросам в нерабочее время, в том числе корпоративы, встречи", group: gWork },
+	var r1 = $("<tr>")
+	head.append(r1)
+	r1.append($("<th>").attr("colspan", 2).text(i18n.headingExpenditures))
 
-		sleep: { name: "Сон", defWd: 8, defSs: 8, normWd: 8, normSs: 8, group: gPhys },
-		eat: { name: "Еда", defWd: 2.5, defSs: 2.5, group: gPhys, comment: "Рекомендуемый минимум - 2,5 часа в день" },
-		dress: { name: "Уход за собой", defWd: 1, defSs: 1, group: gPhys, comment: "Рекомендуемый минимум для женщин - 1,5 час в день, для мужчин - 0,5 часа в день" },
-	
-		tv: { name: "Просмотр телевизора, серфинг по интернету", group: gWaste},
-		alcohol: { name: "Посиделки с алкоголем", group: gWaste},
+	var r2 = $("<tr>")
+	head.append(r2)
 
-		sport: { name: "Спорт", group: gPers },
-		friendsComm: { name: "Общение с близкими, друзьями", group: gPers },
-		reading: { name: "Чтение", group: gPers },
-		hobby: { name: "Хобби", group: gPers },		
-		shopping: { name: "Шоппинг", group: gPers },
-		entertainment: { name: "Прочие развлечения", group: gPers },
-		trainingOther: { name: "Образование, не связанное с работой", group: gPers }
-	}
+	r2.append($("<th>").text(i18n.activity))
+	r2.append($("<th>").text(i18n.workDays))
+	r2.append($("<th>").text(i18n.weekEnds))
+
+	table.append($("<tbody>").attr("id", "calcInput"))
+
+	topLevelDiv.append(
+		$("<button>").attr("id", "calcButton").click(function() {
+			results = calculate(); chartExpenditures(results);
+		}).text(i18n.buttonCount)
+	)
+
+	topLevelDiv.append($("<p>"))
+	topLevelDiv.append($("<a>").attr("name", "calcResultsAnchor"))
+
+	var resultsDiv = $("<div>").attr("id", "calcResultsDiv").attr("style", 'visibility:hidden')
+	topLevelDiv.append(resultsDiv)
+
+	resultsDiv.append($("<h3>").text(i18n.resultsHeading))
+
+	var list = $("<ul>").attr("id", "calcResults")
+	resultsDiv.append(list)
+	list.append($("<li>"))
+
+	resultsDiv.append($("<span>").attr("id", "calcRemaining"))
+
+	var graph = $("<div>").attr("id", "graphByExp").attr("style", "width:600px;height:300px")
+
+	resultsDiv.append(graph)
+
+	expenditures = i18n.expenditures
+	createTable(expenditures, document.getElementById("calcInput"));
 }
